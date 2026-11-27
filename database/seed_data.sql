@@ -5,21 +5,28 @@ INSERT IGNORE INTO roles (name) VALUES
     ('Manager'),
     ('Inventory Staff');
 
-INSERT IGNORE INTO users (role_id, full_name, username, password_hash, status)
-SELECT r.id, u.full_name, u.username, u.password_hash, u.status
+INSERT IGNORE INTO users (role_id, full_name, mobile_number, username, password_hash, status)
+SELECT r.id, u.full_name, u.mobile_number, u.username, u.password_hash, u.status
 FROM (
-    SELECT 'Administrator' AS role_name, 'Maria Santos' AS full_name, 'admin' AS username,
-           '$2b$12$A2U8PAmL.8OzYKSBVacaPeHxwA6DvHCGwnJrXXMdTokqRCDRQW96u' AS password_hash, 'active' AS status
-    UNION ALL SELECT 'Manager', 'Jose Reyes', 'jreyes',
-           '$2b$12$A2U8PAmL.8OzYKSBVacaPeHxwA6DvHCGwnJrXXMdTokqRCDRQW96u', 'active'
-    UNION ALL SELECT 'Inventory Staff', 'Ana Dela Cruz', 'adelacruz',
-           '$2b$12$A2U8PAmL.8OzYKSBVacaPeHxwA6DvHCGwnJrXXMdTokqRCDRQW96u', 'active'
-    UNION ALL SELECT 'Inventory Staff', 'Paolo Garcia', 'pgarcia',
-           '$2b$12$A2U8PAmL.8OzYKSBVacaPeHxwA6DvHCGwnJrXXMdTokqRCDRQW96u', 'active'
-    UNION ALL SELECT 'Inventory Staff', 'Rico Mendoza', 'rmendoza',
-           '$2b$12$A2U8PAmL.8OzYKSBVacaPeHxwA6DvHCGwnJrXXMdTokqRCDRQW96u', 'inactive'
+    SELECT 'Administrator' AS role_name, 'Maria Santos' AS full_name, '+639175550101' AS mobile_number,
+           'admin' AS username, '$2b$12$A2U8PAmL.8OzYKSBVacaPeHxwA6DvHCGwnJrXXMdTokqRCDRQW96u' AS password_hash, 'active' AS status
+    UNION ALL SELECT 'Manager', 'Jose Reyes', '+639175550102', 'jreyes', '$2b$12$A2U8PAmL.8OzYKSBVacaPeHxwA6DvHCGwnJrXXMdTokqRCDRQW96u', 'active'
+    UNION ALL SELECT 'Inventory Staff', 'Ana Dela Cruz', '09175550103', 'adelacruz', '$2b$12$A2U8PAmL.8OzYKSBVacaPeHxwA6DvHCGwnJrXXMdTokqRCDRQW96u', 'active'
+    UNION ALL SELECT 'Inventory Staff', 'Paolo Garcia', '09175550104', 'pgarcia', '$2b$12$A2U8PAmL.8OzYKSBVacaPeHxwA6DvHCGwnJrXXMdTokqRCDRQW96u', 'active'
+    UNION ALL SELECT 'Inventory Staff', 'Rico Mendoza', '09175550105', 'rmendoza', '$2b$12$A2U8PAmL.8OzYKSBVacaPeHxwA6DvHCGwnJrXXMdTokqRCDRQW96u', 'inactive'
 ) u
 JOIN roles r ON r.name = u.role_name;
+
+UPDATE users
+SET mobile_number = CASE username
+        WHEN 'admin' THEN '+639175550101'
+        WHEN 'jreyes' THEN '+639175550102'
+        WHEN 'adelacruz' THEN '09175550103'
+        WHEN 'pgarcia' THEN '09175550104'
+        WHEN 'rmendoza' THEN '09175550105'
+    END
+WHERE username IN ('admin', 'jreyes', 'adelacruz', 'pgarcia', 'rmendoza')
+  AND mobile_number IS NULL;
 
 INSERT IGNORE INTO categories (name) VALUES
     ('Floor Care'),

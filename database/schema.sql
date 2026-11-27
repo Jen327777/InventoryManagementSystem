@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
     id INT NOT NULL AUTO_INCREMENT,
     role_id INT NOT NULL,
     full_name VARCHAR(100) NOT NULL,
+    mobile_number VARCHAR(20) NULL,
     username VARCHAR(50) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     status ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
